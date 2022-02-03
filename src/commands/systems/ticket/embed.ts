@@ -1,4 +1,4 @@
-import { db, fetchMessage, getMessage, Ticket } from '../../..';
+import { db, get, save, fetchMessage, getMessage } from '../../..';
 import { MessageEmbedOptions } from 'discord.js';
 import { Command, SLEmbed } from 'sl-commands';
 
@@ -7,22 +7,12 @@ export default new Command({
 	type: 'SUBCOMMAND',
 	reference: 'ticket',
 	callback: async ({ client, interaction, options }) => {
-		const { locale, user } = interaction;
+		await interaction.deferReply({ ephemeral: true });
+		const { locale } = interaction;
 
-		let ticket = (db.get('ticket') || {}) as Ticket;
+		let ticket = get(db, 't');
 		let { messageId, channelId } = ticket;
-
 		let message = await fetchMessage(channelId, messageId, client);
-
-		if (!message) {
-			let eError = new SLEmbed().setError(
-				getMessage(locale, 'ticket', 'NO_TICKET')
-			);
-
-			db.delete('ticket');
-			interaction.reply({ embeds: [eError], ephemeral: true });
-			return;
-		}
 
 		ticket.embed = {
 			color: options.getString('cor'),
@@ -43,19 +33,16 @@ export default new Command({
 					eError = new SLEmbed().setError(getMessage(locale, 'unknown_error'));
 				}
 
-				interaction.reply({ embeds: [eError], ephemeral: true });
+				interaction.editReply({ embeds: [eError] });
 				return;
 			}
 		}
 
-		db.set('ticket', ticket);
-		db.save();
-
 		let eSuccess = new SLEmbed().setSuccess(
-			getMessage(locale, 'ticket', 'EMBED'),
-			user.tag
+			getMessage(locale, 'ticket', 'EMBED')
 		);
 
-		interaction.reply({ embeds: [eSuccess] });
+		await save(db, ticket);
+		interaction.editReply({ embeds: [eSuccess] });
 	},
 });

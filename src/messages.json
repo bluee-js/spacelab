@@ -54,7 +54,7 @@
 			"pt-br": "Os cargos foram definidos com sucesso.",
 			"en-us": "The roles was successfully setted."
 		},
-		"NO_CAPTCHA": {
+		"NO": {
 			"pt-br": "Não consegui encontrar o captcha. Use '/captcha canal' para criar.",
 			"en-us": "I couldn't find the captcha. Use '/captcha canal' to create."
 		},
@@ -108,7 +108,7 @@
 			"pt-br": "Os cargos foram definidos com sucesso.",
 			"en-us": "The roles have been setted successfully."
 		},
-		"NO_TICKET": {
+		"NO": {
 			"pt-br": "Não consegui encontrar o ticket. Use '/ticket canal' para criar.",
 			"en-us": "I couldn't find the captcha. Use '/ticket canal' to create."
 		},
@@ -139,6 +139,24 @@
 		"TRANSCRIPT": {
 			"pt-br": "Para ter acesso ao transcrito contate algum administrador.",
 			"en-us": "For gaining access to the transcript contact any administrator."
+		}
+	},
+	"chat": {
+		"deleting": {
+			"pt-br": "Apagando mensagens... {Q} já foram apagadas.",
+			"en-us": "Deleting messages... {Q} have already been deleted."
+		},
+		"deleted": {
+			"pt-br": "Apagadas {Q} mensagens.",
+			"en-us": "{Q} messages were deleted."
+		},
+		"locked": {
+			"pt-br": "O canal #{CHANNEL} foi trancado com sucesso.",
+			"en-us": "The channel #{CHANNEL} was successfully locked."
+		},
+		"unlocked": {
+			"pt-br": "O canal #{CHANNEL} foi destrancado com sucesso.",
+			"en-us": "The channel #{CHANNEL} was successfully unlocked."
 		}
 	}
 }

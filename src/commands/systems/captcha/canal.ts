@@ -1,35 +1,31 @@
 import {
-	TextChannel,
-	MessageEmbed,
-	MessageButton,
 	MessageActionRow,
+	MessageButton,
+	MessageEmbed,
+	TextChannel,
 } from 'discord.js';
 
-import { db, getMessage, Captcha } from '../../..';
+import { db, get, save, getMessage, fetchMessage } from '../../..';
 import { Command, SLEmbed } from 'sl-commands';
 
 export default new Command({
 	name: 'channel',
 	type: 'SUBCOMMAND',
 	reference: 'canal',
-	callback: async ({ interaction, options }) => {
-		const { guild, locale, user } = interaction;
+	callback: async ({ client, interaction, options }) => {
+		await interaction.deferReply({ ephemeral: true });
+		const { locale } = interaction;
 
 		let channel = options.getChannel('canal_de_texto') as TextChannel;
-		let captcha = (db.get('captcha') || {}) as Captcha;
 
+		let captcha = get(db, 'c');
 		let { embed, messageId, channelId } = captcha;
-
-		if (messageId) {
-			let oldChannel = guild.channels.cache.get(channelId) as TextChannel;
-			oldChannel.messages.cache.get(messageId)?.delete();
-		}
+		(await fetchMessage(channelId, messageId, client))?.delete();
 
 		let eSuccess = new SLEmbed().setSuccess(
 			getMessage(locale, 'captcha', 'CHANNEL', {
 				CHANNEL: channel.name,
-			}),
-			user.tag
+			})
 		);
 
 		let eCaptcha = new MessageEmbed(
@@ -45,9 +41,10 @@ export default new Command({
 			new MessageButton()
 				.setStyle('SUCCESS')
 				.setCustomId('captcha')
-				.setLabel('Captcha')
+				.setLabel('Verificar | Verify')
 		);
 
+		captcha.channelId = channel.id;
 		captcha.messageId = (
 			await channel.send({
 				components: [rCaptcha],
@@ -55,11 +52,7 @@ export default new Command({
 			})
 		).id;
 
-		captcha.channelId = channel.id;
-
-		db.set('captcha', captcha);
-		db.save();
-
-		await interaction.reply({ embeds: [eSuccess] });
+		await save(db, captcha);
+		interaction.editReply({ embeds: [eSuccess] });
 	},
 });

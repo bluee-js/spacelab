@@ -20,8 +20,8 @@ export type Ticket = {
 	channelId: string;
 	messageId: string;
 	rolesId: string[];
-	message: {};
-	embed: {};
+	message: { title: string; color: string; description: string };
+	embed: { title: string; image: string; color: string; description: string };
 };
 
 export type EInteraction<K extends 'BUTTON' | 'SELECT' | 'CHAT' = 'CHAT'> =

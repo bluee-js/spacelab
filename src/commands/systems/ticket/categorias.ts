@@ -1,5 +1,5 @@
+import { db, get, save, fetchMessage, getMessage } from '../../..';
 import { MessageActionRow, MessageSelectMenu } from 'discord.js';
-import { db, fetchMessage, getMessage, Ticket } from '../../..';
 import { Command, SLEmbed } from 'sl-commands';
 
 export default new Command({
@@ -7,19 +7,15 @@ export default new Command({
 	type: 'SUBCOMMAND',
 	reference: 'ticket',
 	callback: async ({ client, interaction, options }) => {
-		const { locale, guild, user } = interaction;
+		await interaction.deferReply({ ephemeral: true });
+		const { locale } = interaction;
 
-		let ticket = (db.get('ticket') || {}) as Ticket;
+		let ticket = get(db, 't');
 		let { messageId, channelId } = ticket;
-
 		let message = await fetchMessage(channelId, messageId, client);
 
-		let categoriesArray = options.data[0].options.map(
-			(o) => o.value
-		) as string[];
-
-		ticket.categories = categoriesArray.map((c) => {
-			let [label, emoji] = c.split(';').map((c) => c.trim());
+		ticket.categories = options.data[0].options.map((o) => {
+			let [label, emoji] = (o.value as string).split(';').map((c) => c.trim());
 			return { label, emoji };
 		});
 
@@ -33,22 +29,18 @@ export default new Command({
 						label: c.label,
 						value: c.label,
 						emoji: c.emoji,
-					})) || [{ label: 'None', value: 'None' }]
+					}))
 				)
 		);
-
-		if (message) message.edit({ components: [rTicket] });
 
 		let eSuccess = new SLEmbed().setSuccess(
 			getMessage(locale, 'ticket', 'CATEGORY', {
 				QUANTITY: ticket.categories.length,
-			}),
-			user.tag
+			})
 		);
 
-		await db.set('ticket', ticket);
-		await db.save();
-
-		interaction.reply({ embeds: [eSuccess] });
+		await save(db, ticket);
+		interaction.editReply({ embeds: [eSuccess] });
+		if (message) message.edit({ components: [rTicket] });
 	},
 });

@@ -1,52 +1,47 @@
 import {
-	TextChannel,
-	MessageEmbed,
-	CategoryChannel,
-	MessageActionRow,
+	MessageEmbedOptions,
 	MessageSelectMenu,
+	MessageActionRow,
+	CategoryChannel,
+	MessageEmbed,
+	TextChannel,
 } from 'discord.js';
 
-import { db, getMessage, Ticket } from '../../..';
+import { db, get, save, fetchMessage, getMessage } from '../../..';
 import { Command, SLEmbed } from 'sl-commands';
 
 export default new Command({
 	name: 'canal',
 	type: 'SUBCOMMAND',
 	reference: 'ticket',
-	callback: async ({ interaction, options }) => {
-		await interaction.deferReply();
+	callback: async ({ client, interaction, options }) => {
+		await interaction.deferReply({ ephemeral: true });
+		const { locale } = interaction;
 
-		const { guild, locale, user } = interaction;
-
-		let transcript = options.getChannel('transcritos') as TextChannel;
-		let category = options.getChannel('categoria') as CategoryChannel;
 		let channel = options.getChannel('canal_de_texto') as TextChannel;
-		let ticket = (db.get('ticket') || {}) as Ticket;
+		let category = options.getChannel('categoria') as CategoryChannel;
+		let transcript = options.getChannel('transcritos') as TextChannel;
 
+		let ticket = get(db, 't');
 		let { embed, categories, messageId, channelId } = ticket;
-
-		if (messageId) {
-			let oldChannel = guild.channels.cache.get(channelId) as TextChannel;
-			oldChannel.messages.cache.get(messageId)?.delete();
-		}
+		(await fetchMessage(channelId, messageId, client))?.delete();
 
 		let eSuccess = new SLEmbed().setSuccess(
-			getMessage(locale, 'ticket', 'CHANNEL', { CHANNEL: channel.name }),
-			user.tag
+			getMessage(locale, 'ticket', 'CHANNEL', { CHANNEL: channel.name })
 		);
 
 		let eTicket = new MessageEmbed(
-			embed ?? {
+			(embed ?? {
 				description:
 					'Selecione uma categoria abaixo para abrir um ticket.\n*Select a category above to open a ticket.*',
 				color: 'BLURPLE',
 				title: 'Ticket',
-			}
+			}) as MessageEmbedOptions
 		);
 
 		let rTicket = new MessageActionRow().addComponents(
 			new MessageSelectMenu()
-				.setPlaceholder('Categories...')
+				.setPlaceholder('Categorias...')
 				.setCustomId('ticket')
 				.setMaxValues(1)
 				.addOptions(
@@ -60,8 +55,13 @@ export default new Command({
 				)
 		);
 
-		if (!categories) rTicket.components[0].setDisabled(true);
+		if (!categories) {
+			rTicket.components[0].setDisabled(true);
+		}
 
+		ticket.transcriptId = transcript.id;
+		ticket.categoryId = category.id;
+		ticket.channelId = channel.id;
 		ticket.messageId = (
 			await channel.send({
 				components: [rTicket],
@@ -69,13 +69,7 @@ export default new Command({
 			})
 		).id;
 
-		ticket.transcriptId = transcript.id;
-		ticket.categoryId = category.id;
-		ticket.channelId = channel.id;
-
-		await db.set('ticket', ticket);
-		await db.save();
-
-		await interaction.editReply({ embeds: [eSuccess] });
+		await save(db, ticket);
+		interaction.editReply({ embeds: [eSuccess] });
 	},
 });

@@ -1,4 +1,4 @@
-import { db, fetchMessage, getMessage, Ticket } from '../../..';
+import { db, get, save, fetchMessage, getMessage } from '../../..';
 import { Command, SLEmbed } from 'sl-commands';
 
 export default new Command({
@@ -6,30 +6,26 @@ export default new Command({
 	type: 'SUBCOMMAND',
 	reference: 'ticket',
 	callback: async ({ client, interaction, options }) => {
-		const { locale, user } = interaction;
+		await interaction.deferReply({ ephemeral: true });
+		const { locale } = interaction;
 
-		let ticket = (db.get('ticket') || {}) as Ticket;
+		let ticket = get(db, 't');
 		let { messageId, channelId } = ticket;
+		let message = await fetchMessage(channelId, messageId, client);
 
-		if (!(await fetchMessage(channelId, messageId, client))) {
-			let eError = new SLEmbed().setError(
-				getMessage(locale, 'ticket', 'NO_TICKET')
-			);
-
+		if (!message) {
+			let eError = new SLEmbed().setError(getMessage(locale, 'ticket', 'NO'));
 			interaction.reply({ embeds: [eError], ephemeral: true });
 			return;
 		}
 
-		let eSuccess = new SLEmbed().setSuccess(
-			getMessage(locale, 'ticket', 'ROLES'),
-			user.tag
-		);
-
 		ticket.rolesId = options.data[0].options.map((o) => o.value as string);
 
-		db.set('ticket', ticket);
-		db.save();
+		let eSuccess = new SLEmbed().setSuccess(
+			getMessage(locale, 'ticket', 'ROLES')
+		);
 
-		interaction.reply({ embeds: [eSuccess] });
+		await save(db, ticket);
+		interaction.editReply({ embeds: [eSuccess] });
 	},
 });

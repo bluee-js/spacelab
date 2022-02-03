@@ -1,4 +1,4 @@
-import { Captcha, db, EInteraction, getMessage } from '..';
+import { db, get, EInteraction, getMessage } from '..';
 import { Event, SLEmbed } from 'sl-commands';
 import { promisify } from 'util';
 
@@ -10,7 +10,7 @@ export default new Event('interactionCreate', async (_, __, interaction) => {
 	}
 
 	const { member, message, locale } = interaction as EInteraction<'BUTTON'>;
-	let { messageId, rolesId } = (db.get('captcha') || {}) as Captcha;
+	let { messageId, rolesId } = get(db, 'c');
 
 	if (!messageId || !rolesId || message.id !== messageId) {
 		interaction.deferUpdate();

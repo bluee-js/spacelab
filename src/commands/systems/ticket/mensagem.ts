@@ -1,4 +1,4 @@
-import { db, fetchMessage, getMessage, Ticket } from '../../..';
+import { db, get, save, fetchMessage, getMessage } from '../../..';
 import { Collection, Message } from 'discord.js';
 import { Command, SLEmbed } from 'sl-commands';
 import { once } from 'events';
@@ -10,26 +10,24 @@ export default new Command({
 	callback: async ({ client, interaction, options }) => {
 		const { locale, channel, user } = interaction;
 
-		let ticket = (db.get('ticket') || {}) as Ticket;
+		let ticket = get(db, 't');
 		let { messageId, channelId } = ticket;
+		let message = await fetchMessage(channelId, messageId, client);
 
-		if (!(await fetchMessage(channelId, messageId, client))) {
-			let eError = new SLEmbed().setError(
-				getMessage(locale, 'ticket', 'NO_TICKET')
-			);
-			
+		if (!message) {
+			let eError = new SLEmbed().setError(getMessage(locale, 'ticket', 'NO'));
 			interaction.reply({ embeds: [eError], ephemeral: true });
 			return;
 		}
 
 		let eSuccess = new SLEmbed().setSuccess(
-			getMessage(locale, 'ticket', 'MESSAGE'),
-			user.tag
+			getMessage(locale, 'ticket', 'MESSAGE')
 		);
 
 		let eDesc = new SLEmbed()
 			.setLoading(getMessage(locale, 'ticket', 'DESCRIPTION'))
-			.setFooter({ text: getMessage(locale, 'five_minutes') });
+			.setFooter({ text: getMessage(locale, 'five_minutes') })
+			.setDescription(getMessage(locale, 'ticket', 'PLACEHOLDERS'));
 
 		await interaction.reply({ embeds: [eDesc] });
 
@@ -45,23 +43,19 @@ export default new Command({
 		];
 
 		if (reason === 'time') {
-			let eError = new SLEmbed().setError(getMessage(locale, 'time_run_out'));
+			let eError = new SLEmbed().setError(getMessage(locale, 'time_ran_out'));
 
 			interaction.editReply({ embeds: [eError] });
 			return;
 		}
 
-		let { content } = collected.first();
-
 		ticket.message = {
+			description: collected.first().content,
 			title: options.getString('título'),
 			color: options.getString('cor'),
-			description: content,
 		};
 
-		db.set('ticket', ticket);
-		db.save();
-
+		await save(db, ticket);
 		interaction.editReply({ embeds: [eSuccess] });
 	},
 });

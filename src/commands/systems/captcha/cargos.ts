@@ -1,21 +1,20 @@
-import { Captcha, db, getMessage } from '../../..';
+import { db, get, save, getMessage, fetchMessage } from '../../..';
 import { Command, SLEmbed } from 'sl-commands';
 
 export default new Command({
 	name: 'cargos',
 	type: 'SUBCOMMAND',
 	reference: 'captcha',
-	callback: ({ interaction, options }) => {
-		const { locale, user } = interaction;
+	callback: async ({ client, interaction, options }) => {
+		await interaction.deferReply({ ephemeral: true });
+		const { locale } = interaction;
 
-		let captcha = (db.get('captcha') || {}) as Captcha;
-		let { messageId } = captcha;
+		let captcha = get(db, 'c');
+		let { messageId, channelId } = captcha;
+		let message = await fetchMessage(channelId, messageId, client);
 
-		if (!messageId) {
-			let eError = new SLEmbed().setError(
-				getMessage(locale, 'captcha', 'NO_CAPTCHA')
-			);
-
+		if (!message) {
+			let eError = new SLEmbed().setError(getMessage(locale, 'captcha', 'NO'));
 			interaction.reply({ embeds: [eError], ephemeral: true });
 			return;
 		}
@@ -35,13 +34,10 @@ export default new Command({
 		captcha.rolesId = { add: [addRole.id], remove: [removeRole.id] };
 
 		let eSuccess = new SLEmbed().setSuccess(
-			getMessage(locale, 'captcha', 'ROLES'),
-			user.tag
+			getMessage(locale, 'captcha', 'ROLES')
 		);
 
-		db.set('captcha', captcha);
-		db.save();
-
-		interaction.reply({ embeds: [eSuccess] });
+		await save(db, captcha);
+		interaction.editReply({ embeds: [eSuccess] });
 	},
 });

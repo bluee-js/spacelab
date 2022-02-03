@@ -1,14 +1,14 @@
-import { db, getMessage, Ticket } from '../../..';
+import { db, get, getMessage, fetchMessage } from '../../..';
 import { Command, SLEmbed } from 'sl-commands';
 
 export default new Command({
 	name: 'mostrar',
 	type: 'SUBCOMMAND',
 	reference: 'ticket',
-	callback: ({ interaction }) => {
-		const { locale, guildId, user } = interaction;
+	callback: async ({ client, interaction }) => {
+		const { locale } = interaction;
 
-		let ticket = (db.get('ticket') || {}) as Ticket;
+		let ticket = get(db, 't');
 		let {
 			transcriptId,
 			categoryId,
@@ -19,42 +19,36 @@ export default new Command({
 		} = ticket;
 
 		if (!messageId) {
-			let eError = new SLEmbed().setError(
-				getMessage(locale, 'ticket', 'NO_TICKET')
-			);
-
+			let eError = new SLEmbed().setError(getMessage(locale, 'ticket', 'NO'));
 			interaction.reply({ embeds: [eError], ephemeral: true });
 			return;
 		}
 
-		let messageUrl = `https://discord.com/channels/${guildId}/${channelId}/${messageId}`;
-
-		let eShow = new SLEmbed()
-			.setSuccess('Ticket Info', user.tag)
-			.setDescription(
-				`${getMessage(locale, 'ticket', 'SHOW', {
-					TRANSCRIPT: `<#${transcriptId}>`,
-					CATEGORY: `<#${categoryId}>`,
-					CHANNEL: `<#${channelId}>`,
-					URL: messageUrl,
-				})}${
-					rolesId
-						? getMessage(locale, 'ticket', 'SHOW_ROLES', {
-								ROLES: rolesId.map((id) => `<@&${id}>`).join(', '),
-						  })
-						: ''
-				}${
-					categories
-						? getMessage(locale, 'ticket', 'SHOW_CATEGORIES', {
-								CATEGORIES: categories
-									.map((c) =>
-										`${c.emoji ? `${c.emoji} **|**` : ''} ${c.label}`.trim()
-									)
-									.join('\n'),
-						  })
-						: ''
-				}`
-			);
+		let message = await fetchMessage(channelId, messageId, client);
+		let eShow = new SLEmbed().setSuccess('Ticket Info').setDescription(
+			`${getMessage(locale, 'ticket', 'SHOW', {
+				TRANSCRIPT: `<#${transcriptId}>`,
+				CATEGORY: `<#${categoryId}>`,
+				CHANNEL: `<#${channelId}>`,
+				URL: message.url,
+			})}${
+				rolesId
+					? getMessage(locale, 'ticket', 'SHOW_ROLES', {
+							ROLES: rolesId.map((id) => `<@&${id}>`).join(', '),
+					  })
+					: ''
+			}${
+				categories
+					? getMessage(locale, 'ticket', 'SHOW_CATEGORIES', {
+							CATEGORIES: categories
+								.map((c) =>
+									`${c.emoji ? `${c.emoji} **|**` : ''} ${c.label}`.trim()
+								)
+								.join('\n'),
+					  })
+					: ''
+			}`
+		);
 
 		interaction.reply({ embeds: [eShow] });
 	},

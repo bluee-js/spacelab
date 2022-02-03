@@ -19,5 +19,5 @@ export const db = new Database({
 	tabSize: 2,
 });
 
-export * from './message';
+export * from './utils';
 export * from './types';

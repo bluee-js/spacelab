@@ -1,42 +1,36 @@
-import { Captcha, db, getMessage } from '../../..';
+import { db, get, fetchMessage, getMessage } from '../../..';
 import { Command, SLEmbed } from 'sl-commands';
 
 export default new Command({
 	name: 'mostrar',
 	type: 'SUBCOMMAND',
 	reference: 'captcha',
-	callback: ({ interaction }) => {
-		const { locale, guildId, user } = interaction;
+	callback: async ({ client, interaction }) => {
+		const { locale } = interaction;
 
-		let captcha = (db.get('captcha') || {}) as Captcha;
+		let captcha = get(db, 'c');
 		let { messageId, channelId, rolesId } = captcha;
 
 		if (!messageId) {
-			let eError = new SLEmbed().setError(
-				getMessage(locale, 'captcha', 'NO_CAPTCHA')
-			);
-
+			let eError = new SLEmbed().setError(getMessage(locale, 'captcha', 'NO'));
 			interaction.reply({ embeds: [eError], ephemeral: true });
 			return;
 		}
 
-		let messageUrl = `https://discord.com/channels/${guildId}/${channelId}/${messageId}`;
-
-		let eShow = new SLEmbed()
-			.setSuccess('Captcha Info', user.tag)
-			.setDescription(
-				`${getMessage(locale, 'captcha', 'SHOW', {
-					CHANNEL: `<#${channelId}>`,
-					URL: messageUrl,
-				})}${
-					rolesId
-						? getMessage(locale, 'captcha', 'SHOW_ROLES', {
-								ADD_ROLE: `<@&${rolesId.add[0]}>`,
-								REM_ROLE: `<@&${rolesId.remove[0]}>`,
-						  })
-						: ''
-				}`
-			);
+		let message = await fetchMessage(channelId, messageId, client);
+		let eShow = new SLEmbed().setSuccess('Captcha Info').setDescription(
+			`${getMessage(locale, 'captcha', 'SHOW', {
+				CHANNEL: `<#${channelId}>`,
+				URL: message.url,
+			})}${
+				rolesId
+					? getMessage(locale, 'captcha', 'SHOW_ROLES', {
+							ADD_ROLE: `<@&${rolesId.add[0]}>`,
+							REM_ROLE: `<@&${rolesId.remove[0]}>`,
+					  })
+					: ''
+			}`
+		);
 
 		interaction.reply({ embeds: [eShow] });
 	},

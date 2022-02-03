@@ -54,7 +54,7 @@ export default new Command({
 		try {
 			let eSuccess = new SLEmbed().setSuccess(
 				getMessage(locale, 'timeout', 'SUCCESS', { MEMBER: member.user.tag }),
-				`Staff ${user.tag}`
+				user.tag
 			);
 
 			await member.timeout(msd > max ? max : msd);
