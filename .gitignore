@@ -1,0 +1,5 @@
+package-lock.json
+environemnt.d.ts
+node_modules
+.prettierrc
+.env

@@ -1,0 +1,144 @@
+{
+	"loading": {
+		"pt-br": "Carregando...",
+		"en-us": "Loading..."
+	},
+	"five_minutes": {
+		"pt-br": "Você tem 5 minutos para responder.",
+		"en-us": "You have 5 minutes to answer."
+	},
+	"unknown_error": {
+		"pt-br": "Ocorreu um erro desconhecido.",
+		"en-us": "An unknown error has occurred."
+	},
+	"invalid_image": {
+		"pt-br": "O url de imagem provido não é válido.",
+		"en-us": "The provided image url is not valid."
+	},
+	"time_ran_out": {
+		"pt-br": "O tempo para responder se esgotou.",
+		"en-us": "The time to answer han run out."
+	},
+	"no_permission": {
+		"pt-br": "Você não tem permissão para isso.",
+		"en-us": "You do not have permission for that."
+	},
+	"timeout": {
+		"MODERATABLE": {
+			"pt-br": "Esse membro não pode ser moderado por mim.",
+			"en-us": "This member can not be moderated by me."
+		},
+		"EXCEPTION": {
+			"pt-br": "Não foi possível deixar esse membro de castigo.",
+			"en-us": "This member could not be timeouted."
+		},
+		"SUCCESS": {
+			"pt-br": "{MEMBER} foi deixado de castigo.",
+			"en-us": "{MEMBER} has been timeouted."
+		}
+	},
+	"ping": {
+		"pt-br": "**Ping da API:** `{API_MS}ms`\n**Meu ping:** `{BOT_MS}ms`",
+		"en-us": "**API's ping:** `{API_MS}ms`\n**My ping:** `{BOT_MS}ms`"
+	},
+	"captcha": {
+		"CHANNEL": {
+			"pt-br": "Captcha enviado com sucesso em '#{CHANNEL}'.",
+			"en-us": "Captcha has been sent in '#{CHANNEL}'."
+		},
+		"EMBED": {
+			"pt-br": "A embed do captcha foi editada com sucesso.",
+			"en-us": "The captcha embed successfully edited."
+		},
+		"ROLES": {
+			"pt-br": "Os cargos foram definidos com sucesso.",
+			"en-us": "The roles was successfully setted."
+		},
+		"NO_CAPTCHA": {
+			"pt-br": "Não consegui encontrar o captcha. Use '/captcha canal' para criar.",
+			"en-us": "I couldn't find the captcha. Use '/captcha canal' to create."
+		},
+		"ROLES_MANAGED": {
+			"pt-br": "Algum dos cargos selecionados é gerenciado por outra aplicação.",
+			"en-us": "Any of the selected roles is managed by another application."
+		},
+		"SHOW": {
+			"pt-br": "**Canal do captcha:** {CHANNEL}\n**Link para a mensagem:** [Clique aqui]({URL})",
+			"en-us": "**Captcha channel:** {CHANNEL}\n**Jump to message:** [Click here]({URL})"
+		},
+		"SHOW_ROLES": {
+			"pt-br": "\n\n**Adicionar cargo:** {ADD_ROLE}\n**Remover cargo:** {REM_ROLE}",
+			"en-us": "\n\n**Add role:** {ADD_ROLE}\n**Remove role:** {REM_ROLE}"
+		},
+		"VERIFIED": {
+			"pt-br": "Você foi verificado com successo.",
+			"en-us": "You were successfully verified."
+		},
+		"RESET": {
+			"pt-br": "O captcha foi deletado com sucesso.",
+			"en-us": "The captcha was successfully deleted."
+		}
+	},
+	"ticket": {
+		"PLACEHOLDERS": {
+			"pt-br": "**Utilize os seguintes placeholders:**\n\n`{MEMBER}` = O membro que abriu o ticket\n`{CATEGORY}` = A categoria do ticket que foi aberto",
+			"en-us": "**Use the following placeholders:**\n\n`{MEMBER}` = The member who opened the ticket\n`{CATEGORY}` = The opened ticket category"
+		},
+		"DESCRIPTION": {
+			"pt-br": "Envie a descrição para a embed.",
+			"en-us": "Send the embed description."
+		},
+		"CATEGORY": {
+			"pt-br": "Foram adicionadas {QUANTITY} categorias com sucesso.",
+			"en-us": "{QUANTITY} categories were successfully added."
+		},
+		"MESSAGE": {
+			"pt-br": "A mensagem para o ticket foi definida com sucesso.",
+			"en-us": "The ticket message was successfully setted."
+		},
+		"CHANNEL": {
+			"pt-br": "Ticket enviado com sucesso em '#{CHANNEL}'.",
+			"en-us": "Ticket has been sent in '#{CHANNEL}'."
+		},
+		"EMBED": {
+			"pt-br": "A embed do ticket foi editada com sucesso.",
+			"en-us": "The ticket embed was successfully edited."
+		},
+		"ROLES": {
+			"pt-br": "Os cargos foram definidos com sucesso.",
+			"en-us": "The roles have been setted successfully."
+		},
+		"NO_TICKET": {
+			"pt-br": "Não consegui encontrar o ticket. Use '/ticket canal' para criar.",
+			"en-us": "I couldn't find the captcha. Use '/ticket canal' to create."
+		},
+		"RESET": {
+			"pt-br": "O ticket foi deletado com sucesso.",
+			"en-us": "The ticket was successfully deleted."
+		},
+		"SHOW": {
+			"pt-br": "**Categoria dos tickets:** {CATEGORY}\n**Canal de transcritos:** {TRANSCRIPT}\n**Canal do ticket:** {CHANNEL}\n**Link para a mensagem:** [Clique aqui]({URL})",
+			"en-us": "**Tickets category:** {CATEGORY}\n**Transcripts channel:** {TRANSCRIPT}\n**Ticket channel:** {CHANNEL}\n**Jump to message:** [Click here]({URL})"
+		},
+		"SHOW_ROLES": {
+			"pt-br": "\n\n**Cargos com permissão:** {ROLES}",
+			"en-us": "\n\n**Roles with permission:** {ROLES}"
+		},
+		"SHOW_CATEGORIES": {
+			"pt-br": "\n**Categorias disponíveis:**\n{CATEGORIES}",
+			"en-us": "\n**Available categories:**\n{CATEGORIES}"
+		},
+		"ALREADY_CREATED": {
+			"pt-br": "Você já possui um ticket criado.",
+			"en-us": "You already have a ticket created."
+		},
+		"TICKET_CREATED": {
+			"pt-br": "Seu ticket foi criado com sucesso com a categoria: {CATEGORY}",
+			"en-us": "Your ticket was successfully created with the category: {CATEGORY}"
+		},
+		"TRANSCRIPT": {
+			"pt-br": "Para ter acesso ao transcrito contate algum administrador.",
+			"en-us": "For gaining access to the transcript contact any administrator."
+		}
+	}
+}

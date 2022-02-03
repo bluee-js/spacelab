@@ -1,0 +1,50 @@
+{
+  "captcha": {
+    "messageId": "935705861354053732",
+    "channelId": "927752618758012989",
+    "embed": {
+      "title": "Captcaulu",
+      "color": "fknegner",
+      "image": null,
+      "description": "efmkgn"
+    },
+    "rolesId": {
+      "add": [
+        "921819656933756998"
+      ],
+      "remove": [
+        "920874625490104322"
+      ]
+    }
+  },
+  "ticket": {
+    "messageId": "937542239595401286",
+    "transcriptId": "927752618758012989",
+    "categoryId": "912780806236282900",
+    "channelId": "927752618758012989",
+    "categories": [
+      {
+        "label": "Suporte",
+        "emoji": "📌"
+      },
+      {
+        "label": "Compras",
+        "emoji": "🛒"
+      }
+    ],
+    "embed": {
+      "color": null,
+      "title": "Ticket Pa",
+      "image": null,
+      "description": null
+    },
+    "rolesId": [
+      "920874625490104322"
+    ],
+    "message": {
+      "title": "Aaaaa",
+      "color": null,
+      "description": "Askdefobtny"
+    }
+  }
+}

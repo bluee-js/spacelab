@@ -1,0 +1,21 @@
+{
+	"compilerOptions": {
+		"moduleResolution": "node",
+		"module": "commonjs",
+		"target": "ESNext",
+		"lib": ["ESNext"],
+		"outDir": "../spacelab-compile/src",
+		"rootDir": "src",
+		"allowSyntheticDefaultImports": true,
+		"experimentalDecorators": true,
+		"emitDecoratorMetadata": true,
+		"skipDefaultLibCheck": true,
+		"resolveJsonModule": true,
+		"esModuleInterop": true,
+		"importHelpers": true,
+		"skipLibCheck": true,
+		"sourceMap": false
+	},
+	"exclude": ["node_modules", "**/*.spec.ts"],
+	"include": ["src", "enviroment.d.ts"]
+}
