@@ -3,6 +3,11 @@ import messages from './messages.json';
 import { Captcha, Ticket } from '.';
 import { Database } from 'simpl.db';
 
+const db = new Database({
+	collectionsFolder: 'collections',
+	tabSize: 2,
+});
+
 function getMessage<
 	T extends keyof typeof messages,
 	U extends keyof typeof messages[T]
@@ -26,20 +31,20 @@ function getMessage<
 	return message;
 }
 
-function get(db: Database, type: 't'): Ticket;
-function get(db: Database, type: 'c'): Captcha;
-function get(db: Database, type: 't' | 'c'): Ticket | Captcha {
+function get(type: 't'): Ticket;
+function get(type: 'c'): Captcha;
+function get(type: 't' | 'c'): Ticket | Captcha {
 	return (db.get(type) || {}) as Ticket | Captcha;
 }
 
-async function del(db: Database, type: 't' | 'c') {
+async function del(type: 't' | 'c') {
 	let ref = { t: 'ticket', c: 'captcha' };
 
 	await db.delete(ref[type]);
 	await db.save();
 }
 
-async function save(db: Database, ticketOrCaptcha: Ticket | Captcha) {
+async function save(ticketOrCaptcha: Ticket | Captcha) {
 	let ref: string;
 	
 	if ('transcriptId' in ticketOrCaptcha) ref = 'ticket';
@@ -64,4 +69,4 @@ async function fetchMessage(
 	}
 }
 
-export { getMessage, fetchMessage, save, del, get };
+export { getMessage, fetchMessage, save, del, get, db };

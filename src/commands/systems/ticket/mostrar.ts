@@ -1,5 +1,5 @@
-import { db, get, getMessage, fetchMessage } from '../../..';
-import { Command, SLEmbed } from 'sl-commands';
+import { get, getMessage, fetchMessage, Embed } from '../../..';
+import { Command } from 'sl-commands';
 
 export default new Command({
 	name: 'mostrar',
@@ -8,7 +8,7 @@ export default new Command({
 	callback: async ({ client, interaction }) => {
 		const { locale } = interaction;
 
-		let ticket = get(db, 't');
+		let ticket = get('t');
 		let {
 			transcriptId,
 			categoryId,
@@ -19,13 +19,13 @@ export default new Command({
 		} = ticket;
 
 		if (!messageId) {
-			let eError = new SLEmbed().setError(getMessage(locale, 'ticket', 'NO'));
+			let eError = new Embed().setError(getMessage(locale, 'ticket', 'NO'));
 			interaction.reply({ embeds: [eError], ephemeral: true });
 			return;
 		}
 
 		let message = await fetchMessage(channelId, messageId, client);
-		let eShow = new SLEmbed().setSuccess('Ticket Info').setDescription(
+		let eShow = new Embed().setSuccess('Ticket Info').setDescription(
 			`${getMessage(locale, 'ticket', 'SHOW', {
 				TRANSCRIPT: `<#${transcriptId}>`,
 				CATEGORY: `<#${categoryId}>`,

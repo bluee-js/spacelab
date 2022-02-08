@@ -1,6 +1,6 @@
-import { db, get, save, fetchMessage, getMessage } from '../../..';
+import { get, save, fetchMessage, getMessage, Embed } from '../../..';
 import { Collection, Message } from 'discord.js';
-import { Command, SLEmbed } from 'sl-commands';
+import { Command } from 'sl-commands';
 import { once } from 'events';
 
 export default new Command({
@@ -10,21 +10,21 @@ export default new Command({
 	callback: async ({ client, interaction, options }) => {
 		const { locale, channel, user } = interaction;
 
-		let ticket = get(db, 't');
+		let ticket = get('t');
 		let { messageId, channelId } = ticket;
 		let message = await fetchMessage(channelId, messageId, client);
 
 		if (!message) {
-			let eError = new SLEmbed().setError(getMessage(locale, 'ticket', 'NO'));
+			let eError = new Embed().setError(getMessage(locale, 'ticket', 'NO'));
 			interaction.reply({ embeds: [eError], ephemeral: true });
 			return;
 		}
 
-		let eSuccess = new SLEmbed().setSuccess(
+		let eSuccess = new Embed().setSuccess(
 			getMessage(locale, 'ticket', 'MESSAGE')
 		);
 
-		let eDesc = new SLEmbed()
+		let eDesc = new Embed()
 			.setLoading(getMessage(locale, 'ticket', 'DESCRIPTION'))
 			.setFooter({ text: getMessage(locale, 'five_minutes') })
 			.setDescription(getMessage(locale, 'ticket', 'PLACEHOLDERS'));
@@ -43,7 +43,7 @@ export default new Command({
 		];
 
 		if (reason === 'time') {
-			let eError = new SLEmbed().setError(getMessage(locale, 'time_ran_out'));
+			let eError = new Embed().setError(getMessage(locale, 'time_ran_out'));
 
 			interaction.editReply({ embeds: [eError] });
 			return;
@@ -55,7 +55,7 @@ export default new Command({
 			color: options.getString('cor'),
 		};
 
-		await save(db, ticket);
+		await save(ticket);
 		interaction.editReply({ embeds: [eSuccess] });
 	},
 });

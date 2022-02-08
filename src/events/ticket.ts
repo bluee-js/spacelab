@@ -10,8 +10,8 @@ import {
 } from 'discord.js';
 
 import { generateFromMessages } from 'discord-html-transcripts-tweaked';
-import { db, get, EInteraction, getMessage } from '..';
-import { Event, SLEmbed } from 'sl-commands';
+import { get, EInteraction, getMessage, Embed } from '..';
+import { Event } from 'sl-commands';
 import { once } from 'events';
 
 export default new Event('interactionCreate', async (_, __, interaction) => {
@@ -28,7 +28,7 @@ export default new Event('interactionCreate', async (_, __, interaction) => {
 		categoryId,
 		transcriptId,
 		message: desc,
-	} = get(db, 't');
+	} = get('t');
 
 	if (!messageId || !desc || message.id !== messageId) {
 		interaction.deferUpdate();
@@ -39,7 +39,7 @@ export default new Event('interactionCreate', async (_, __, interaction) => {
 	let category = guild.channels.cache.get(categoryId) as CategoryChannel;
 
 	if (category.children.find((c: TextChannel) => c.topic === user.id)) {
-		let eError = new SLEmbed().setError(
+		let eError = new Embed().setError(
 			getMessage(locale, 'ticket', 'ALREADY_CREATED')
 		);
 
@@ -81,7 +81,7 @@ export default new Event('interactionCreate', async (_, __, interaction) => {
 		.replaceAll('{MEMBER}', `${user}`)
 		.replaceAll('{CATEGORY}', `${interaction.values[0]}`);
 
-	let eMessage = new SLEmbed(desc as MessageEmbedOptions);
+	let eMessage = new Embed(desc as MessageEmbedOptions);
 	let rMessage = new MessageActionRow().addComponents(
 		new MessageButton()
 			.setEmoji('💾')
@@ -106,7 +106,7 @@ export default new Event('interactionCreate', async (_, __, interaction) => {
 		embeds: [eMessage],
 	});
 
-	let eReply = new SLEmbed().setSuccess(
+	let eReply = new Embed().setSuccess(
 		getMessage(locale, 'ticket', 'TICKET_CREATED', {
 			CATEGORY: interaction.values[0],
 		})
@@ -132,7 +132,7 @@ export default new Event('interactionCreate', async (_, __, interaction) => {
 			(!rolesId?.some((id) => int.member.roles.cache.has(id)) ||
 				int.member.permissions.has('ADMINISTRATOR'))
 		) {
-			let eError = new SLEmbed().setError(getMessage(locale, 'no_permission'));
+			let eError = new Embed().setError(getMessage(locale, 'no_permission'));
 
 			int.reply({ ephemeral: true, embeds: [eError] });
 			return;
@@ -143,7 +143,7 @@ export default new Event('interactionCreate', async (_, __, interaction) => {
 				SEND_MESSAGES: false,
 			});
 
-			let eLock = new SLEmbed()
+			let eLock = new Embed()
 				.setSuccess('Ticket trancado.')
 				.setDescription('**Ticket locked.**');
 
@@ -153,7 +153,7 @@ export default new Event('interactionCreate', async (_, __, interaction) => {
 				SEND_MESSAGES: true,
 			});
 
-			let eUnlock = new SLEmbed()
+			let eUnlock = new Embed()
 				.setSuccess('Ticket destrancado.')
 				.setDescription('**Ticket unlocked.**');
 
@@ -164,7 +164,7 @@ export default new Event('interactionCreate', async (_, __, interaction) => {
 			);
 
 			if (!messages.size) {
-				let eError = new SLEmbed()
+				let eError = new Embed()
 					.setError('Ainda não foram enviadas mensagens.')
 					.setDescription('**No messages were sent yet.**');
 
@@ -172,7 +172,7 @@ export default new Event('interactionCreate', async (_, __, interaction) => {
 				return;
 			}
 
-			let eClosing = new SLEmbed()
+			let eClosing = new Embed()
 				.setLoading('Fechando ticket em 5 segundos...')
 				.setDescription('**Closing ticket in 5 seconds...**')
 				.setFooter({ text: getMessage(locale, 'ticket', 'TRANSCRIPT') });
@@ -208,7 +208,7 @@ export default new Event('interactionCreate', async (_, __, interaction) => {
 			let [_, reason] = await once(collector, 'end');
 
 			if (reason === 'limit') {
-				let eCancelled = new SLEmbed()
+				let eCancelled = new Embed()
 					.setSuccess('Cancelado com sucesso.')
 					.setDescription('**Successfully canceled.** ');
 
@@ -220,7 +220,7 @@ export default new Event('interactionCreate', async (_, __, interaction) => {
 					{ fileName: `transcript-${user.id}` }
 				);
 
-				let eTranscript = new SLEmbed()
+				let eTranscript = new Embed()
 					.setSuccess(
 						'Novo transcrito',
 						'Baixe a abra o arquivo em seu navegador'

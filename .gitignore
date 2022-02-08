@@ -1,5 +1,6 @@
 package-lock.json
 environemnt.d.ts
+database.json
 node_modules
 .prettierrc
 .env

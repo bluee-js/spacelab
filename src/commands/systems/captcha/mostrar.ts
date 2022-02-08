@@ -1,5 +1,5 @@
-import { db, get, fetchMessage, getMessage } from '../../..';
-import { Command, SLEmbed } from 'sl-commands';
+import { get, fetchMessage, getMessage, Embed } from '../../..';
+import { Command } from 'sl-commands';
 
 export default new Command({
 	name: 'mostrar',
@@ -8,17 +8,17 @@ export default new Command({
 	callback: async ({ client, interaction }) => {
 		const { locale } = interaction;
 
-		let captcha = get(db, 'c');
+		let captcha = get('c');
 		let { messageId, channelId, rolesId } = captcha;
 
 		if (!messageId) {
-			let eError = new SLEmbed().setError(getMessage(locale, 'captcha', 'NO'));
+			let eError = new Embed().setError(getMessage(locale, 'captcha', 'NO'));
 			interaction.reply({ embeds: [eError], ephemeral: true });
 			return;
 		}
 
 		let message = await fetchMessage(channelId, messageId, client);
-		let eShow = new SLEmbed().setSuccess('Captcha Info').setDescription(
+		let eShow = new Embed().setSuccess('Captcha Info').setDescription(
 			`${getMessage(locale, 'captcha', 'SHOW', {
 				CHANNEL: `<#${channelId}>`,
 				URL: message.url,

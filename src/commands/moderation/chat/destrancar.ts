@@ -1,6 +1,6 @@
-import { Command, SLEmbed } from 'sl-commands';
+import { getMessage, Embed } from '../../..';
 import { TextChannel } from 'discord.js';
-import { getMessage } from '../../..';
+import { Command } from 'sl-commands';
 
 export default new Command({
 	name: 'destrancar',
@@ -10,7 +10,7 @@ export default new Command({
 		let { channel, guild, locale } = interaction;
 
 		channel = (options.getChannel('canal_de_texto') || channel) as TextChannel;
-		let eUnlock = new SLEmbed().setSuccess(
+		let eUnlock = new Embed().setSuccess(
 			getMessage(locale, 'chat', 'unlocked')
 		);
 

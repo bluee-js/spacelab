@@ -1,6 +1,6 @@
-import { db, get, save, fetchMessage, getMessage } from '../../..';
+import { get, save, fetchMessage, getMessage, Embed } from '../../..';
 import { MessageActionRow, MessageSelectMenu } from 'discord.js';
-import { Command, SLEmbed } from 'sl-commands';
+import { Command } from 'sl-commands';
 
 export default new Command({
 	name: 'categorias',
@@ -10,7 +10,7 @@ export default new Command({
 		await interaction.deferReply({ ephemeral: true });
 		const { locale } = interaction;
 
-		let ticket = get(db, 't');
+		let ticket = get('t');
 		let { messageId, channelId } = ticket;
 		let message = await fetchMessage(channelId, messageId, client);
 
@@ -33,13 +33,13 @@ export default new Command({
 				)
 		);
 
-		let eSuccess = new SLEmbed().setSuccess(
+		let eSuccess = new Embed().setSuccess(
 			getMessage(locale, 'ticket', 'CATEGORY', {
 				QUANTITY: ticket.categories.length,
 			})
 		);
 
-		await save(db, ticket);
+		await save(ticket);
 		interaction.editReply({ embeds: [eSuccess] });
 		if (message) message.edit({ components: [rTicket] });
 	},

@@ -5,8 +5,8 @@ import {
 	TextChannel,
 } from 'discord.js';
 
-import { db, get, save, getMessage, fetchMessage } from '../../..';
-import { Command, SLEmbed } from 'sl-commands';
+import { get, save, getMessage, fetchMessage, Embed } from '../../..';
+import { Command } from 'sl-commands';
 
 export default new Command({
 	name: 'channel',
@@ -18,11 +18,11 @@ export default new Command({
 
 		let channel = options.getChannel('canal_de_texto') as TextChannel;
 
-		let captcha = get(db, 'c');
+		let captcha = get('c');
 		let { embed, messageId, channelId } = captcha;
 		(await fetchMessage(channelId, messageId, client))?.delete();
 
-		let eSuccess = new SLEmbed().setSuccess(
+		let eSuccess = new Embed().setSuccess(
 			getMessage(locale, 'captcha', 'CHANNEL', {
 				CHANNEL: channel.name,
 			})
@@ -52,7 +52,7 @@ export default new Command({
 			})
 		).id;
 
-		await save(db, captcha);
+		await save(captcha);
 		interaction.editReply({ embeds: [eSuccess] });
 	},
 });

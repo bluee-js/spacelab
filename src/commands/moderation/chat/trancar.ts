@@ -1,6 +1,6 @@
-import { Command, SLEmbed } from 'sl-commands';
+import { getMessage, Embed } from '../../..';
 import { TextChannel } from 'discord.js';
-import { getMessage } from '../../..';
+import { Command } from 'sl-commands';
 
 export default new Command({
 	name: 'trancar',
@@ -10,7 +10,7 @@ export default new Command({
 		let { channel, guild, locale } = interaction;
 
 		channel = (options.getChannel('canal_de_texto') || channel) as TextChannel;
-		let eLock = new SLEmbed().setSuccess(getMessage(locale, 'chat', 'locked'));
+		let eLock = new Embed().setSuccess(getMessage(locale, 'chat', 'locked'));
 
 		channel.permissionOverwrites.edit(guild.roles.everyone, {
 			SEND_MESSAGES: false,

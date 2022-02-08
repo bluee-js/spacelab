@@ -1,5 +1,5 @@
-import { db, get, del, getMessage, fetchMessage } from '../../..';
-import { Command, SLEmbed } from 'sl-commands';
+import { get, del, getMessage, fetchMessage, Embed } from '../../..';
+import { Command } from 'sl-commands';
 
 export default new Command({
 	name: 'resetar',
@@ -9,21 +9,21 @@ export default new Command({
 		await interaction.deferReply({ ephemeral: true });
 		const { locale } = interaction;
 
-		let captcha = get(db, 'c');
+		let captcha = get('c');
 		let { messageId, channelId } = captcha;
 		let message = await fetchMessage(channelId, messageId, client);
 
 		if (!message) {
-			let eError = new SLEmbed().setError(getMessage(locale, 'captcha', 'NO'));
+			let eError = new Embed().setError(getMessage(locale, 'captcha', 'NO'));
 			interaction.reply({ embeds: [eError], ephemeral: true });
 			return;
 		}
 
-		let eSuccess = new SLEmbed().setSuccess(
+		let eSuccess = new Embed().setSuccess(
 			getMessage(locale, 'captcha', 'RESET')
 		);
 
-		await del(db, 'c');
+		await del('c');
 		if (message) await message.delete();
 		interaction.reply({ embeds: [eSuccess] });
 	},

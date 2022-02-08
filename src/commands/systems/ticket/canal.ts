@@ -7,8 +7,8 @@ import {
 	TextChannel,
 } from 'discord.js';
 
-import { db, get, save, fetchMessage, getMessage } from '../../..';
-import { Command, SLEmbed } from 'sl-commands';
+import { get, save, fetchMessage, getMessage, Embed } from '../../..';
+import { Command } from 'sl-commands';
 
 export default new Command({
 	name: 'canal',
@@ -22,11 +22,11 @@ export default new Command({
 		let category = options.getChannel('categoria') as CategoryChannel;
 		let transcript = options.getChannel('transcritos') as TextChannel;
 
-		let ticket = get(db, 't');
+		let ticket = get('t');
 		let { embed, categories, messageId, channelId } = ticket;
 		(await fetchMessage(channelId, messageId, client))?.delete();
 
-		let eSuccess = new SLEmbed().setSuccess(
+		let eSuccess = new Embed().setSuccess(
 			getMessage(locale, 'ticket', 'CHANNEL', { CHANNEL: channel.name })
 		);
 
@@ -69,7 +69,7 @@ export default new Command({
 			})
 		).id;
 
-		await save(db, ticket);
+		await save(ticket);
 		interaction.editReply({ embeds: [eSuccess] });
 	},
 });

@@ -1,6 +1,6 @@
-import { db, get, save, getMessage, fetchMessage } from '../../..';
+import { get, save, getMessage, fetchMessage, Embed } from '../../..';
 import { MessageEmbedOptions } from 'discord.js';
-import { Command, SLEmbed } from 'sl-commands';
+import { Command } from 'sl-commands';
 
 export default new Command({
 	name: 'embed',
@@ -10,15 +10,9 @@ export default new Command({
 		await interaction.deferReply({ ephemeral: true });
 		const { locale } = interaction;
 
-		let captcha = get(db, 'c');
+		let captcha = get('c');
 		let { messageId, channelId } = captcha;
 		let message = await fetchMessage(channelId, messageId, client);
-
-		if (!message) {
-			let eError = new SLEmbed().setError(getMessage(locale, 'captcha', 'NO'));
-			interaction.reply({ embeds: [eError], ephemeral: true });
-			return;
-		}
 
 		captcha.embed = {
 			color: options.getString('cor'),
@@ -31,12 +25,12 @@ export default new Command({
 			try {
 				await message.edit({ embeds: [captcha.embed as MessageEmbedOptions] });
 			} catch (e) {
-				let eError: SLEmbed;
+				let eError: Embed;
 
 				if (e.code === 50035) {
-					eError = new SLEmbed().setError(getMessage(locale, 'invalid_image'));
+					eError = new Embed().setError(getMessage(locale, 'invalid_image'));
 				} else {
-					eError = new SLEmbed().setError(getMessage(locale, 'unknown_error'));
+					eError = new Embed().setError(getMessage(locale, 'unknown_error'));
 				}
 
 				interaction.editReply({ embeds: [eError] });
@@ -44,11 +38,11 @@ export default new Command({
 			}
 		}
 
-		let eSuccess = new SLEmbed().setSuccess(
+		let eSuccess = new Embed().setSuccess(
 			getMessage(locale, 'captcha', 'EMBED')
 		);
 
-		await save(db, captcha);
+		await save(captcha);
 		interaction.reply({ embeds: [eSuccess] });
 	},
 });

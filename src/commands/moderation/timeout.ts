@@ -1,6 +1,6 @@
-import { Command, SLEmbed } from 'sl-commands';
+import { getMessage, Embed } from '../..';
 import { GuildMember } from 'discord.js';
-import { getMessage } from '../..';
+import { Command } from 'sl-commands';
 
 export default new Command({
 	name: 'timeout',
@@ -43,7 +43,7 @@ export default new Command({
 		let msd = time * unit;
 
 		if (!member.moderatable) {
-			let eError = new SLEmbed().setError(
+			let eError = new Embed().setError(
 				getMessage(locale, 'timeout', 'MODERATABLE')
 			);
 
@@ -52,7 +52,7 @@ export default new Command({
 		}
 
 		try {
-			let eSuccess = new SLEmbed().setSuccess(
+			let eSuccess = new Embed().setSuccess(
 				getMessage(locale, 'timeout', 'SUCCESS', { MEMBER: member.user.tag }),
 				user.tag
 			);
@@ -60,7 +60,7 @@ export default new Command({
 			await member.timeout(msd > max ? max : msd);
 			interaction.reply({ embeds: [eSuccess] });
 		} catch {
-			let eError = new SLEmbed().setError(
+			let eError = new Embed().setError(
 				getMessage(locale, 'timeout', 'EXCEPTION')
 			);
 

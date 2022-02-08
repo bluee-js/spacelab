@@ -1,6 +1,6 @@
-import { Command, SLEmbed } from 'sl-commands';
+import { getMessage, Embed } from '../..';
+import { Command } from 'sl-commands';
 import { Message } from 'discord.js';
-import { getMessage } from '../..';
 
 export default new Command({
 	name: 'ping',
@@ -9,15 +9,13 @@ export default new Command({
 	callback: async ({ client, interaction }) => {
 		const { locale } = interaction;
 
-		let eLoading = new SLEmbed().setLoading(getMessage(locale, 'loading'));
-		let msApi = client.ws.ping;
-
 		interaction
-			.reply({ fetchReply: true, embeds: [eLoading] })
+			.deferReply({ fetchReply: true })
 			.then(({ createdTimestamp }: Message) => {
 				let msBot = Date.now() - createdTimestamp;
+				let msApi = client.ws.ping;
 
-				let ePing = new SLEmbed().setDescription(
+				let ePing = new Embed().setDescription(
 					getMessage(locale, 'ping', null, { BOT_MS: msBot, API_MS: msApi })
 				);
 

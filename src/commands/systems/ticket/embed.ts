@@ -1,6 +1,6 @@
-import { db, get, save, fetchMessage, getMessage } from '../../..';
+import { get, save, fetchMessage, getMessage, Embed } from '../../..';
 import { MessageEmbedOptions } from 'discord.js';
-import { Command, SLEmbed } from 'sl-commands';
+import { Command } from 'sl-commands';
 
 export default new Command({
 	name: 'embed',
@@ -10,7 +10,7 @@ export default new Command({
 		await interaction.deferReply({ ephemeral: true });
 		const { locale } = interaction;
 
-		let ticket = get(db, 't');
+		let ticket = get('t');
 		let { messageId, channelId } = ticket;
 		let message = await fetchMessage(channelId, messageId, client);
 
@@ -25,12 +25,12 @@ export default new Command({
 			try {
 				await message.edit({ embeds: [ticket.embed as MessageEmbedOptions] });
 			} catch (e) {
-				let eError: SLEmbed;
+				let eError: Embed;
 
 				if (e.code === 50035) {
-					eError = new SLEmbed().setError(getMessage(locale, 'invalid_image'));
+					eError = new Embed().setError(getMessage(locale, 'invalid_image'));
 				} else {
-					eError = new SLEmbed().setError(getMessage(locale, 'unknown_error'));
+					eError = new Embed().setError(getMessage(locale, 'unknown_error'));
 				}
 
 				interaction.editReply({ embeds: [eError] });
@@ -38,11 +38,11 @@ export default new Command({
 			}
 		}
 
-		let eSuccess = new SLEmbed().setSuccess(
+		let eSuccess = new Embed().setSuccess(
 			getMessage(locale, 'ticket', 'EMBED')
 		);
 
-		await save(db, ticket);
+		await save(ticket);
 		interaction.editReply({ embeds: [eSuccess] });
 	},
 });

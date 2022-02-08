@@ -1,6 +1,6 @@
-import { Command, SLEmbed } from 'sl-commands';
 import { Message, TextChannel } from 'discord.js';
-import { getMessage } from '../../..';
+import { getMessage, Embed } from '../../..';
+import { Command } from 'sl-commands';
 
 export default new Command({
 	name: 'limpar',
@@ -15,7 +15,7 @@ export default new Command({
 		let quantity = options.getNumber('quantidade');
 		let sum = 0;
 
-		let eDelete = new SLEmbed().setLoading(
+		let eDelete = new Embed().setLoading(
 			getMessage(locale, 'chat', 'deleting', { Q: 0 })
 		);
 
