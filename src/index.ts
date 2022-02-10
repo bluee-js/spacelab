@@ -4,7 +4,7 @@ import { Client } from 'discord.js';
 import { join } from 'path';
 import 'dotenv/config';
 
-new SLCommands(new Client({ intents: 14319 }), {
+const SL = new SLCommands(new Client({ intents: 14319 }), {
 	commandsDir: join(__dirname, 'commands'),
 	eventsDir: join(__dirname, 'events'),
 	testServers: ['912780805770735637', '932471237328908359'],
@@ -12,6 +12,10 @@ new SLCommands(new Client({ intents: 14319 }), {
 	botToken: process.env.botToken,
 	showWarns: true,
 	testOnly: true,
+});
+
+SL.on('commandException', (commandName, error) => {
+	SL.logger.error(commandName, error);
 });
 
 export * from './utils';
