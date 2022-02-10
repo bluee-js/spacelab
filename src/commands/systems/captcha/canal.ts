@@ -20,7 +20,9 @@ export default new Command({
 
 		let captcha = get('c');
 		let { embed, messageId, channelId } = captcha;
-		(await fetchMessage(channelId, messageId, client))?.delete();
+		let message = await fetchMessage(channelId, messageId, client);
+
+		if (message) message.delete().catch(() => null);
 
 		let eSuccess = new Embed().setSuccess(
 			getMessage(locale, 'captcha', 'CHANNEL', {

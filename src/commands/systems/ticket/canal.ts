@@ -24,7 +24,9 @@ export default new Command({
 
 		let ticket = get('t');
 		let { embed, categories, messageId, channelId } = ticket;
-		(await fetchMessage(channelId, messageId, client))?.delete();
+		let message = await fetchMessage(channelId, messageId, client);
+
+		if (message) message.delete().catch(() => null);
 
 		let eSuccess = new Embed().setSuccess(
 			getMessage(locale, 'ticket', 'CHANNEL', { CHANNEL: channel.name })
