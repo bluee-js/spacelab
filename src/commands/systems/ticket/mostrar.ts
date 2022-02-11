@@ -20,7 +20,7 @@ export default new Command({
 
 		if (!messageId) {
 			let eError = new Embed().setError(getMessage(locale, 'ticket', 'NO'));
-			interaction.reply({ embeds: [eError], ephemeral: true });
+			interaction.editReply({ embeds: [eError] });
 			return;
 		}
 

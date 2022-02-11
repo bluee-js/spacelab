@@ -39,7 +39,7 @@ export default new Command({
 			})
 		);
 
-		await save(ticket);
+		await save(ticket, 't');
 		interaction.editReply({ embeds: [eSuccess] });
 		if (message) message.edit({ components: [rTicket] });
 	},

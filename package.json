@@ -4,7 +4,7 @@
   "main": "src/index.ts",
   "scripts": {
     "start": "cls && ts-node src/index.ts --transpile-only",
-    "dev": "cls && ts-node-dev src/index.ts"
+    "dev": "cls && ts-node-dev src/index.ts --transpile-only"
   },
   "keywords": [],
   "author": "",

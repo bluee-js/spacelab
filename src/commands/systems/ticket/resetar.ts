@@ -15,7 +15,7 @@ export default new Command({
 
 		if (!message) {
 			let eError = new Embed().setError(getMessage(locale, 'ticket', 'NO'));
-			interaction.reply({ embeds: [eError], ephemeral: true });
+			interaction.editReply({ embeds: [eError] });
 			return;
 		}
 
@@ -25,6 +25,6 @@ export default new Command({
 
 		await del('t');
 		if (message) await message.delete();
-		interaction.reply({ embeds: [eSuccess] });
+		interaction.editReply({ embeds: [eSuccess] });
 	},
 });

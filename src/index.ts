@@ -1,5 +1,4 @@
 import SLCommands from 'sl-commands';
-import { Database } from 'simpl.db';
 import { Client } from 'discord.js';
 import { join } from 'path';
 import 'dotenv/config';

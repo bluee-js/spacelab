@@ -71,7 +71,7 @@ export default new Command({
 			})
 		).id;
 
-		await save(ticket);
+		await save(ticket, 't');
 		interaction.editReply({ embeds: [eSuccess] });
 	},
 });

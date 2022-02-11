@@ -15,7 +15,7 @@ export default new Command({
 		let message = await fetchMessage(channelId, messageId, client);
 
 		captcha.embed = {
-			color: options.getString('cor'),
+			color: options.getString('cor') ?? message?.embeds[0].color,
 			title: options.getString('título'),
 			image: options.getString('imagem'),
 			description: options.getString('descrição'),
@@ -42,7 +42,7 @@ export default new Command({
 			getMessage(locale, 'captcha', 'EMBED')
 		);
 
-		await save(captcha);
-		interaction.reply({ embeds: [eSuccess] });
+		await save(captcha, 'c');
+		interaction.editReply({ embeds: [eSuccess] });
 	},
 });

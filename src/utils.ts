@@ -25,7 +25,7 @@ function getMessage<
 		: index[language];
 
 	for (let key in keys || {}) {
-		message = message.replaceAll(`{${key}}`, keys[key].toString());
+		message = message.replaceAll(`{${key}}`, `${keys[key]}`);
 	}
 
 	return message;
@@ -34,7 +34,9 @@ function getMessage<
 function get(type: 't'): Ticket;
 function get(type: 'c'): Captcha;
 function get(type: 't' | 'c'): Ticket | Captcha {
-	return (db.get(type) || {}) as Ticket | Captcha;
+	let ref = { t: 'ticket', c: 'captcha' };
+
+	return (db.get(ref[type]) || {}) as Captcha | Ticket;
 }
 
 async function del(type: 't' | 'c') {
@@ -44,13 +46,10 @@ async function del(type: 't' | 'c') {
 	await db.save();
 }
 
-async function save(ticketOrCaptcha: Ticket | Captcha) {
-	let ref: string;
-	
-	if ('transcriptId' in ticketOrCaptcha) ref = 'ticket';
-	else ref = 'captcha';
+async function save(object: Ticket | Captcha, type: 't' | 'c') {
+	let ref = { t: 'ticket', c: 'captcha' };
 
-	await db.set(ref, ticketOrCaptcha);
+	await db.set(ref[type], object);
 	await db.save();
 }
 

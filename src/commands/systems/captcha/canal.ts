@@ -9,9 +9,9 @@ import { get, save, getMessage, fetchMessage, Embed } from '../../..';
 import { Command } from 'sl-commands';
 
 export default new Command({
-	name: 'channel',
+	name: 'canal',
 	type: 'SUBCOMMAND',
-	reference: 'canal',
+	reference: 'captcha',
 	callback: async ({ client, interaction, options }) => {
 		await interaction.deferReply({ ephemeral: true });
 		const { locale } = interaction;
@@ -54,7 +54,7 @@ export default new Command({
 			})
 		).id;
 
-		await save(captcha);
+		await save(captcha, 'c');
 		interaction.editReply({ embeds: [eSuccess] });
 	},
 });

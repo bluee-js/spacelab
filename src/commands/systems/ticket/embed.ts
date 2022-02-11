@@ -42,7 +42,7 @@ export default new Command({
 			getMessage(locale, 'ticket', 'EMBED')
 		);
 
-		await save(ticket);
+		await save(ticket, 't');
 		interaction.editReply({ embeds: [eSuccess] });
 	},
 });

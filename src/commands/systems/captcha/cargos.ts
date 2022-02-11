@@ -15,7 +15,7 @@ export default new Command({
 
 		if (!message) {
 			let eError = new Embed().setError(getMessage(locale, 'captcha', 'NO'));
-			interaction.reply({ embeds: [eError], ephemeral: true });
+			interaction.editReply({ embeds: [eError] });
 			return;
 		}
 
@@ -27,7 +27,7 @@ export default new Command({
 				getMessage(locale, 'captcha', 'ROLES_MANAGED')
 			);
 
-			interaction.reply({ embeds: [eError], ephemeral: true });
+			interaction.editReply({ embeds: [eError] });
 			return;
 		}
 
@@ -37,7 +37,7 @@ export default new Command({
 			getMessage(locale, 'captcha', 'ROLES')
 		);
 
-		await save(captcha);
+		await save(captcha, 'c');
 		interaction.editReply({ embeds: [eSuccess] });
 	},
 });
