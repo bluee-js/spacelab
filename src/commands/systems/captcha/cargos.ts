@@ -22,7 +22,7 @@ export default new Command({
 		let removeRole = options.getRole('remover_cargo');
 		let addRole = options.getRole('adicionar_cargo');
 
-		if (removeRole.managed || addRole.managed) {
+		if (removeRole?.managed || addRole.managed) {
 			let eError = new Embed().setError(
 				getMessage(locale, 'captcha', 'ROLES_MANAGED')
 			);

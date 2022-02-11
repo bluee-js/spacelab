@@ -15,7 +15,7 @@ export default new Command({
 		let message = await fetchMessage(channelId, messageId, client);
 
 		ticket.categories = options.data[0].options.map((o) => {
-			let [label, emoji] = (o.value as string).split(';').map((c) => c.trim());
+			let [label, emoji = null] = (o.value as string).split(';').map((c) => c.trim());
 			return { label, emoji };
 		});
 
